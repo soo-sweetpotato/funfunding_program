@@ -2,64 +2,252 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ post.title }}</title>
+    <style>
+        /* 전체 스타일 */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e6f7ff;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        /* 헤더 스타일 */
+        header {
+            background-color: #b3e0ff;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        header .logo h1 {
+            margin: 0;
+            font-size: 2em;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #0073e6;
+        }
+
+        header .logo a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* 컨테이너 */
+        .container {
+            width: 90%;
+            max-width: 800px;
+            margin: 30px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #f1f1f1;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .price-info, .progress-info {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #e6f7ff;
+            border: 1px solid #b3e0ff;
+            border-radius: 5px;
+        }
+
+        progress {
+            width: 100%;
+            height: 20px;
+            margin-top: 10px;
+        }
+
+        /* 버튼 스타일 */
+        button, .button-group a, .delete-comment {
+            background-color: #66b3ff;
+            color: white;
+            text-decoration: none;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        button:hover, .button-group a:hover, .delete-comment:hover {
+            background-color: #3399ff;
+        }
+
+        .button-group {
+            margin-top: 20px;
+            text-align: right;
+        }
+
+        .button-group a {
+            margin-left: 10px;
+        }
+
+        /* 댓글 섹션 */
+        .comment-section {
+            margin-top: 30px;
+        }
+
+        .comment-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .comment-list li {
+            background-color: #f8f8f8;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .comment-list strong {
+            color: #0073e6;
+        }
+
+        .delete-comment {
+            background-color: #66b3ff;
+            padding: 5px 10px;
+            font-size: 0.9em;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            resize: none;
+            box-sizing: border-box;
+        }
+
+        form button {
+            background-color: #66b3ff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 10px;
+        }
+
+        form button:hover {
+            background-color: #3399ff;
+        }
+
+        /* 하단 링크 */
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        a {
+            color: #0073e6;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-    <!-- 알림 메시지 표시 -->
-    {% if messages %}
-        <ul>
-            {% for message in messages %}
-                <li style="color:{{ message.tags }}">{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+    <!-- 헤더 -->
+    <header>
+        <div class="logo">
+            <a href="{% url 'post_list' %}">
+                <h1>FunFunding</h1>
+            </a>
+        </div>
+    </header>
 
-    <h1>{{ post.title }}</h1>
-    <p>{{ post.content }}</p>
-    <p>가격: {{ post.price }}원</p>
-    <p>모집 인원: {{ post.current_applicants }} / {{ post.capacity }}</p>
-    <p>모집 진행률: {{ post.current_applicants|floatformat:0 }} / {{ post.capacity }}</p>
-    <progress value="{{ post.current_applicants }}" max="{{ post.capacity }}"></progress>
+    <!-- 컨테이너 -->
+    <div class="container">
+        <!-- 게시물 상세 -->
+        <h1>{{ post.title }}</h1>
+        <p>{{ post.content }}</p>
 
-    {% if post.is_full %}
-        <p style="color:red;">모집이 마감되었습니다.</p>
-    {% else %}
-        <form method="POST">
-            {% csrf_token %}
-            <button type="submit" name="support">지원하기</button>
-        </form>
-    {% endif %}
+        <div class="price-info">
+            <p><strong>가격:</strong> {{ post.price }}원</p>
+        </div>
+        <div class="progress-info">
+            <p><strong>모집 인원:</strong> {{ post.current_applicants }} / {{ post.capacity }}</p>
+            <progress value="{{ post.current_applicants }}" max="{{ post.capacity }}"></progress>
+        </div>
 
-    <hr>
+        <!-- 지원하기 버튼 -->
+        {% if not post.is_full %}
+            <form method="POST">
+                {% csrf_token %}
+                <button type="submit" name="support">지원하기</button>
+            </form>
+        {% else %}
+            <p class="alert">모집이 마감되었습니다.</p>
+        {% endif %}
 
-    <!-- 댓글 섹션 -->
-    <h2>댓글</h2>
+        <!-- 수정 및 삭제 버튼 -->
+        {% if user.is_authenticated and user == post.author %}
+            <div class="button-group">
+                <a href="{% url 'post_edit' post.pk %}">수정</a>
+                <a href="{% url 'post_delete' post.pk %}">삭제</a>
+            </div>
+        {% endif %}
 
-    <!-- 댓글 목록 -->
-    <ul>
-        {% for comment in comments %}
-            <li>
-                <strong>{{ comment.user.username }}</strong>: {{ comment.content }}
-                <small>({{ comment.created_at }})</small>
-                {% if comment.user == user %}  <!-- 댓글 작성자인 경우 삭제 버튼 표시 -->
-                    <a href="{% url 'comment_delete' comment.pk %}">삭제</a>
-                {% endif %}
-            </li>
-        {% empty %}
-            <li>댓글이 없습니다.</li>
-        {% endfor %}
-    </ul>
+        <!-- 댓글 섹션 -->
+        <div class="comment-section">
+            <h2>댓글</h2>
+            <ul class="comment-list">
+                {% for comment in comments %}
+                    <li>
+                        <div>
+                            <strong>{{ comment.user.username }}</strong>: {{ comment.content }}
+                            <small>({{ comment.created_at }})</small>
+                        </div>
+                        {% if user.is_authenticated and user == comment.user %}
+                            <a href="{% url 'comment_delete' comment.pk %}" class="delete-comment">삭제</a>
+                        {% endif %}
+                    </li>
+                {% empty %}
+                    <li>댓글이 없습니다.</li>
+                {% endfor %}
+            </ul>
 
-    <!-- 댓글 작성 폼 -->
-    <form method="POST">
-        {% csrf_token %}
-        <textarea name="content" rows="3" placeholder="댓글을 입력하세요" required></textarea><br>
-        <button type="submit" name="comment">댓글 작성</button>
-    </form>
+            <!-- 댓글 입력창 -->
+            <form method="POST">
+                {% csrf_token %}
+                <textarea name="content" rows="3" placeholder="댓글을 입력하세요" required></textarea>
+                <button type="submit" name="comment">댓글 작성</button>
+            </form>
+        </div>
 
-    <hr>
-
-    <a href="{% url 'post_list' %}">목록으로 돌아가기</a>
+        <!-- 하단 링크 -->
+        <div class="footer">
+            <a href="{% url 'post_list' %}">목록으로 돌아가기</a>
+        </div>
+    </div>
 </body>
 </html>
 
+
+        <!-- 하단 링크 -->
+        <div class="footer">
+            <a href="{% url 'post_list' %}">목록으로 돌아가기</a>
+        </div>
+    </div>
+</body>
+</html>

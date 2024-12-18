@@ -2,18 +2,119 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>댓글 삭제</title>
+    <style>
+        /* 전체 스타일 */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e6f7ff; /* 파스텔 하늘색 배경 */
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        /* 헤더 스타일 */
+        header {
+            background-color: #b3e0ff;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        header .logo h1 {
+            margin: 0;
+            font-size: 2em;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #0073e6;
+        }
+
+        header .logo a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* 컨테이너 */
+        .container {
+            width: 90%;
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #f1f1f1;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        p {
+            margin: 10px 0;
+            color: #555;
+            font-size: 1em;
+        }
+
+        /* 버튼 스타일 */
+        form button, a {
+            display: inline-block;
+            padding: 10px 15px;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            color: white;
+            background-color: #66b3ff;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+
+        form button:hover, a:hover {
+            background-color: #3399ff;
+        }
+
+        a.cancel-button {
+            background-color: #b3e0ff;
+            color: white;
+        }
+
+        a.cancel-button:hover {
+            background-color: #66b3ff;
+        }
+    </style>
 </head>
 <body>
-    <h1>댓글 삭제</h1>
-    <p>댓글: {{ comment.content }}</p>
-    <p>작성자: {{ comment.user.username }}</p>
-    <p>작성일: {{ comment.created_at }}</p>
+    <!-- 헤더 -->
+    <header>
+        <div class="logo">
+            <a href="{% url 'post_list' %}">
+                <h1>FunFunding</h1>
+            </a>
+        </div>
+    </header>
 
-    <form method="POST">
-        {% csrf_token %}
-        <button type="submit">삭제 확인</button>
-    </form>
-    <a href="{% url 'post_detail' comment.post.pk %}">취소</a>
+    <!-- 컨테이너 -->
+    <div class="container">
+        <h1>댓글 삭제</h1>
+        <p><strong>댓글:</strong> {{ comment.content }}</p>
+        <p><strong>작성자:</strong> {{ comment.user.username }}</p>
+        <p><strong>작성일:</strong> {{ comment.created_at }}</p>
+
+        <!-- 삭제 확인 폼 -->
+        <form method="POST">
+            {% csrf_token %}
+            <button type="submit">삭제 확인</button>
+        </form>
+        
+        <!-- 취소 버튼 -->
+        <a href="{% url 'post_detail' comment.post.pk %}" class="cancel-button">취소</a>
+    </div>
 </body>
 </html>
