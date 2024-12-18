@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'funding',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -122,3 +123,4 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.1.100', '172.20.24.49']  # 자신의 IP 추가

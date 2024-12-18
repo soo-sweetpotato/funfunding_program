@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 작성</title>
+</head>
+<body>
+    <h1>게시글 작성</h1>
+    <form method="POST">
+        {% csrf_token %}
+        
+        <!-- 제목 -->
+        <label>제목:</label><br>
+        <input type="text" name="title" required><br>
+        
+        <!-- 내용 -->
+        <label>내용:</label><br>
+        <textarea name="content" rows="10" cols="50" required></textarea><br>
+        
+        <!-- 가격 -->
+        <label>가격:</label><br>
+        <input type="number" name="price" placeholder="가격을 입력하세요" required><br>
+        
+        <!-- 모집 인원 -->
+        <label>모집 인원:</label><br>
+        <input type="number" name="capacity" placeholder="모집 인원을 입력하세요" required><br>
+        
+        <!-- 작성 버튼 -->
+        <button type="submit">작성하기</button>
+    </form>
+
+    <!-- 목록으로 돌아가기 링크 -->
+    <a href="{% url 'post_list' %}">목록으로 돌아가기</a>
+</body>
+</html>
