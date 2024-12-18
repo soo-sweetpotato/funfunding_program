@@ -94,6 +94,18 @@
             margin-left: 10px;
         }
 
+        /* 경고 메시지 */
+        .alert {
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #ffcccc;
+            color: #cc0000;
+            text-align: center;
+            font-weight: bold;
+            border: 1px solid #ffaaaa;
+            border-radius: 5px;
+        }
+
         /* 댓글 섹션 */
         .comment-section {
             margin-top: 30px;
@@ -190,6 +202,13 @@
             <progress value="{{ post.current_applicants }}" max="{{ post.capacity }}"></progress>
         </div>
 
+        <!-- 경고 메시지 -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
         <!-- 지원하기 버튼 -->
         {% if not post.is_full %}
             <form method="POST">
@@ -234,15 +253,6 @@
                 <button type="submit" name="comment">댓글 작성</button>
             </form>
         </div>
-
-        <!-- 하단 링크 -->
-        <div class="footer">
-            <a href="{% url 'post_list' %}">목록으로 돌아가기</a>
-        </div>
-    </div>
-</body>
-</html>
-
 
         <!-- 하단 링크 -->
         <div class="footer">
